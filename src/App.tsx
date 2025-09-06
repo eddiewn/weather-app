@@ -12,10 +12,15 @@ function App() {
 	const apiCall = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
 
 	async function fetchData(){
-		const res = await fetch(apiCall);
-		const result = await res.json();
-		setData(result);
-		console.log(result);
+		try {
+			const res = await fetch(apiCall);
+			const result = await res.json();
+			setData(result);
+			console.log(result);
+		} catch (error) {
+			console.log(error)
+		}
+
 	}
 
 	useEffect(() => {
@@ -28,7 +33,7 @@ function App() {
 		<h1>Hello world</h1>
 		<input 
 		type="text"
-		placeholder="Name city";
+		placeholder="Name city"
 		onChange={(e) => {
 			setCity(e.target.value);
 		}}
