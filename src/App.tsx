@@ -15,9 +15,13 @@ function App() {
     const [city, setCity] = useState<string>("");
     const [weatherData, setWeatherData] = useState<any>({});
     const [loading, setLoading] = useState<boolean>(true);
+    const [malmoData, setMalmoData] = useState<any>();
 
     const apiKey: string = import.meta.env.VITE_WEATHER_API_KEY;
     const apiCall = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${apiKey}`;
+    const staticMalmoApiCall = `https://api.openweathermap.org/data/2.5/forecast?q=malmö&units=metric&appid=${apiKey}`;
+
+    
     async function fetchData() {
         if(!city) return;
         setLoading(true);
@@ -25,6 +29,8 @@ function App() {
         try {
             const res = await fetch(apiCall);
             const data = await res.json();
+
+
 
             setWeatherData(data);
             console.log(data);
@@ -35,13 +41,29 @@ function App() {
         }
     }
 
-    
+    // const displayWeatherData = weatherData.list.slice(0, 8).map((item: any) => ({
+    //                 name: item.dt_txt,
+    //                 pv: item.main.temp,
+    //             }))
 
-    useEffect(() => {}, []);
+    useEffect(() => {
+        async function fetchMalmo(){
+            try{
+                const resMalmo = await fetch(staticMalmoApiCall);
+                const dataMalmo = await resMalmo.json();
+                setMalmoData(dataMalmo);
+                console.log(dataMalmo)
+            } catch(error){
+                console.log(error)
+            }
+    }
+
+
+    }, []);
 
     return (
         <>
-            <h1>{weatherData.name}</h1>
+            <h1>home</h1>
             <input
                 type="text"
                 placeholder="Name city"
@@ -59,16 +81,14 @@ function App() {
                 Get data
             </button>
 
+
   {!loading && weatherData?.list && (
     <div>
         <p>
-            <LineChart
+            {/* <LineChart
                 width={500}
                 height={300}
-                data={weatherData.list.slice(0, 8).map((item: any) => ({
-                    name: item.dt_txt,
-                    pv: item.main.temp,
-                }))}
+                data={displayWeatherData}
                 margin={{
                     top: 5,
                     right: 30,
@@ -86,7 +106,7 @@ function App() {
                     activeDot={{r: 8}}
                 />
                 <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-            </LineChart>
+            </LineChart> */}
         </p>
     </div>
   )}
