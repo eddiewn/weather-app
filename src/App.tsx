@@ -13,10 +13,12 @@ import "./App.css";
 
 function App() {
     const [city, setCity] = useState<string>("");
-    const [weatherData, setWeatherData] = useState<any>();
     const [loading, setLoading] = useState<boolean>(true);
-    const [malmoData, setMalmoData] = useState<any>();
+
+    const [weatherData, setWeatherData] = useState<any>();
     const [displayData, setDisplayData] = useState<any>();
+
+    const [malmoData, setMalmoData] = useState<any>();
     const [displayMalmoData, setDisplayMalmoData] = useState<any>({});
 
     const apiKey: string = import.meta.env.VITE_WEATHER_API_KEY;
@@ -55,7 +57,7 @@ function App() {
         if (malmoData?.list) {
             setDisplayMalmoData(
                 malmoData.list.slice(0, 8).map((item: any) => ({
-                    name: item.dt_txt,
+                    name: item.dt_txt.slice(5, 16),
                     Temperature: item.main.temp,
                 }))
             );
@@ -78,7 +80,7 @@ function App() {
 
     return (
         <>
-            <h1>{malmoData?malmoData.city.name : "Loading"}</h1>
+            <h1>{malmoData ? malmoData.city.name : "Loading"}</h1>
             <input
                 type="text"
                 placeholder="Name city"
@@ -112,8 +114,13 @@ function App() {
                                 }}
                             >
                                 <XAxis dataKey="name" />
-                                <YAxis />
-                                <Tooltip />
+                                <YAxis label={{value: "°C", dx: -10,}} />
+                                <Tooltip
+                                    formatter={(value) => [
+                                        `${value} °C`,
+                                        "Temperature",
+                                    ]}
+                                />{" "}
                                 <Line
                                     type="monotone"
                                     dataKey="Temperature"
