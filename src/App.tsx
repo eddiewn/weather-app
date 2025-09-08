@@ -41,8 +41,6 @@ function App() {
     }
 
     useEffect(() => {
-
-
         if (!loading) {
             setDisplayData(
                 weatherData.list.slice(0, 8).map((item: any) => ({
@@ -56,15 +54,15 @@ function App() {
     useEffect(() => {
         if (malmoData?.list) {
             setDisplayMalmoData(
-            malmoData.list.slice(0, 8).map((item: any) => ({
-                name: item.dt_txt,
-                temperature: item.main.temp,
-            }))
+                malmoData.list.slice(0, 8).map((item: any) => ({
+                    name: item.dt_txt,
+                    temperature: item.main.temp,
+                }))
             );
         }
-    },[malmoData])
+    }, [malmoData]);
 
-        useEffect(() => {
+    useEffect(() => {
         async function fetchMalmo() {
             try {
                 const resMalmo = await fetch(staticMalmoApiCall);
@@ -74,10 +72,9 @@ function App() {
             } catch (error) {
                 console.log(error);
             }
-            
         }
         fetchMalmo();
-    },[])
+    }, []);
 
     return (
         <>
