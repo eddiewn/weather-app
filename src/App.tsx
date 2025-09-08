@@ -18,9 +18,11 @@ function App() {
     const [displayData, setDisplayData] = useState<any>();
     const [checked, setChecked] = useState<boolean>(false);
     const [unit, setUnit] = useState<string>("metric");
+    const [fiveDayForecast, setFiveDayForecast] = useState<[]>([])
 
     const apiKey: string = import.meta.env.VITE_WEATHER_API_KEY;
     const apiCall = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=${unit}&appid=${apiKey}`;
+
     async function fetchData() {
         if (!city) return;
         setLoading(true);
@@ -56,15 +58,15 @@ function App() {
                     icon: item.weather[0].icon,
                 }))
             );
+
+            for (let entry = 0; entry < weatherData.list.length; entry++) {
+                
+            }
         }
-    }, [weatherData]);
+    }, [weatherData, unit]);
 
     useEffect(() => {
-        if (checked) {
-            setUnit("imperial");
-        } else {
-            setUnit("metric");
-        }
+        checked ? setUnit("imperial") : setUnit("metric");
     }, [checked]);
 
     return (
