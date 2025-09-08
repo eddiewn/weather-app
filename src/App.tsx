@@ -33,6 +33,12 @@ function App() {
             const res = await fetch(apiCall);
             const data = await res.json();
 
+
+            if (data.cod !== "200") {
+            alert(`Error: ${data.message}`);
+            return;
+        }
+
             setWeatherData(data);
             console.log(data);
         } catch (error) {
@@ -46,8 +52,8 @@ function App() {
         if (!loading) {
             setDisplayData(
                 weatherData.list.slice(0, 8).map((item: any) => ({
-                    name: item.dt_txt,
-                    pv: item.main.temp,
+                    name: item.dt_txt.slice(5, 16),
+                    Temperature: item.main.temp,
                 }))
             );
         }
@@ -80,7 +86,7 @@ function App() {
 
     return (
         <>
-            <h1>{malmoData ? malmoData.city.name : "Loading"}</h1>
+            <h1>{weatherData ? weatherData.city.name : malmoData ? malmoData.city.name : "Loading"}</h1>
             <input
                 type="text"
                 placeholder="Name city"
@@ -105,7 +111,7 @@ function App() {
                             <LineChart
                                 width={500}
                                 height={300}
-                                data={displayMalmoData}
+                                data={displayData?.length > 0 ? displayData : displayMalmoData}
                                 margin={{
                                     top: 5,
                                     right: 30,
