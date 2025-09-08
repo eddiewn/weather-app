@@ -1,7 +1,5 @@
 import {useEffect, useState} from "react";
 import {
-    AreaChart,
-    Area,
     LineChart,
     Line,
     XAxis,
@@ -18,14 +16,17 @@ function App() {
 
     const [weatherData, setWeatherData] = useState<any>();
     const [displayData, setDisplayData] = useState<any>();
-    const [measurement, setMeasurement] = useState<string>("");
+    const [checked, setChecked] = useState<boolean>(false);
+    const [unit, setUnit] = useState<string>("metric");
 
     const [malmoData, setMalmoData] = useState<any>();
     const [displayMalmoData, setDisplayMalmoData] = useState<any>({});
 
+
+
     const apiKey: string = import.meta.env.VITE_WEATHER_API_KEY;
-    const apiCall = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${apiKey}`;
-    const staticMalmoApiCall = `https://api.openweathermap.org/data/2.5/forecast?q=malmö&units=metric&appid=${apiKey}`;
+    const apiCall = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=${unit}&appid=${apiKey}`;
+    const staticMalmoApiCall = `https://api.openweathermap.org/data/2.5/forecast?q=malmö&units=${unit}&appid=${apiKey}`;
 
     async function fetchData() {
         if (!city) return;
@@ -86,7 +87,15 @@ function App() {
             }
         }
         fetchMalmo();
-    }, []);
+    }, [unit]);
+
+    useEffect(() => {
+        if(checked){
+            setUnit("imperial");
+        }else{
+            setUnit("metric");
+        }
+    },[checked])
 
     return (
         <>
@@ -115,7 +124,15 @@ function App() {
             </button>
 
             <label className="relative inline-block bg-gray-500 w-15 h-7.5 rounded-full" >
-                <input type="checkbox" id="checkBox" className="sr-only peer" />
+                <input 
+                    type="checkbox" 
+                    id="checkBox" 
+                    className="sr-only peer" 
+                    checked={checked} 
+                    onChange={(e) => {
+                        setChecked(e.target.checked)
+                    }} 
+                />
                 <span className="bg-blue-400 w-2/5 h-4/5 absolute rounded-full left-1/20 top-1/2 transform -translate-y-1/2 peer-checked:bg-amber-700 peer-checked:left-55/100 transition-all duration-300 "></span>
             </label>
 
