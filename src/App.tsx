@@ -18,7 +18,7 @@ function App() {
     const [displayData, setDisplayData] = useState<any>();
     const [checked, setChecked] = useState<boolean>(false);
     const [unit, setUnit] = useState<string>("metric");
-    const [fiveDayForecast, setFiveDayForecast] = useState<[]>([])
+    const [fiveDayForecast, setFiveDayForecast] = useState<any[][]>([]);
 
     const apiKey: string = import.meta.env.VITE_WEATHER_API_KEY;
     const apiCall = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=${unit}&appid=${apiKey}`;
@@ -59,11 +59,22 @@ function App() {
                 }))
             );
 
-            for (let entry = 0; entry < weatherData.list.length; entry++) {
-                
-            }
+            let days: any[][] = [];
+            let currentDay: string | null = null;
+
+            weatherData.list.forEach((listItem: any) => {
+                const date = listItem.dt_txt.slice(0, 10);
+                if (date !== currentDay) {
+                    days.push([]);
+                    currentDay = date;
+                }
+                days[days.length - 1].push(listItem);
+            });
+
+            setFiveDayForecast(days);
+            console.log(days);
         }
-    }, [weatherData, unit]);
+    }, [weatherData, loading, unit]);
 
     useEffect(() => {
         checked ? setUnit("imperial") : setUnit("metric");
@@ -103,79 +114,91 @@ function App() {
             </label>
 
             {displayData?.length > 0 && (
-                <div className="h-44 pr-3">
-                    {
-                        <ResponsiveContainer>
-                            <LineChart
-                                width={500}
-                                height={300}
-                                data={
-                                    displayData?.length > 0
-                                        ? displayData
-                                        : "Loading"
-                                }
-                                margin={{
-                                    top: 5,
-                                    right: 30,
-                                    left: 20,
-                                    bottom: 5,
-                                }}
-                            >
-                                <XAxis dataKey="name" />
-                                <YAxis
-                                    label={{
-                                        value: !checked ? "°C" : "°F",
-                                        dx: -10,
+                <div>
+                    <div className="h-44 pr-3">
+                        {
+                            <ResponsiveContainer>
+                                <LineChart
+                                    width={500}
+                                    height={300}
+                                    data={
+                                        displayData?.length > 0
+                                            ? displayData
+                                            : "Loading"
+                                    }
+                                    margin={{
+                                        top: 5,
+                                        right: 30,
+                                        left: 20,
+                                        bottom: 5,
                                     }}
-                                />
-                                <Tooltip
-                                    content={({active, payload, label}) => {
-                                        if (
-                                            active &&
-                                            payload &&
-                                            payload.length
-                                        ) {
-                                            const data = payload[0].payload;
-                                            return (
-                                                <div className="flex flex-col border-solid border-1 rounded p-2">
-                                                    <p>{label}</p>
-                                                    <p>{`Temperature: ${
-                                                        data.Temperature
-                                                    }${
-                                                        !checked ? "°C" : "°F"
-                                                    }`}</p>
-                                                    <div className="flex items-center h-[100%] justify-evenly">
-                                                        <p>
-                                                            {data.Description}
-                                                        </p>
-                                                        <img
-                                                            className="w-[40%]"
-                                                            src={`https://openweathermap.org/img/wn/${data.icon}.png`}
-                                                            alt={
-                                                                data.Description
-                                                            }
-                                                        />
+                                >
+                                    <XAxis dataKey="name" />
+                                    <YAxis
+                                        label={{
+                                            value: !checked ? "°C" : "°F",
+                                            dx: -10,
+                                        }}
+                                    />
+                                    <Tooltip
+                                        content={({active, payload, label}) => {
+                                            if (
+                                                active &&
+                                                payload &&
+                                                payload.length
+                                            ) {
+                                                const data = payload[0].payload;
+                                                return (
+                                                    <div className="flex flex-col border-solid border-1 rounded p-2">
+                                                        <p>{label}</p>
+                                                        <p>{`Temperature: ${
+                                                            data.Temperature
+                                                        }${
+                                                            !checked
+                                                                ? "°C"
+                                                                : "°F"
+                                                        }`}</p>
+                                                        <div className="flex items-center h-[100%] justify-evenly">
+                                                            <p>
+                                                                {
+                                                                    data.Description
+                                                                }
+                                                            </p>
+                                                            <img
+                                                                className="w-[40%]"
+                                                                src={`https://openweathermap.org/img/wn/${data.icon}.png`}
+                                                                alt={
+                                                                    data.Description
+                                                                }
+                                                            />
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            );
-                                        }
-                                        return null;
-                                    }}
-                                />
-                                <Line
-                                    type="monotone"
-                                    dataKey="Temperature"
-                                    stroke="#8884d8"
-                                    activeDot={{r: 8}}
-                                />
-                                <Line
-                                    type="monotone"
-                                    dataKey="uv"
-                                    stroke="#82ca9d"
-                                />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    }
+                                                );
+                                            }
+                                            return null;
+                                        }}
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="Temperature"
+                                        stroke="#8884d8"
+                                        activeDot={{r: 8}}
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="uv"
+                                        stroke="#82ca9d"
+                                    />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        }
+                    </div>
+                    <h1>{
+                        fiveDayForecast.map((day, dayIndex)=> {
+
+                        })
+}
+</h1>
                 </div>
             )}
         </>
