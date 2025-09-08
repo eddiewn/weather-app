@@ -11,7 +11,7 @@ import {
 import "./App.css";
 
 function App() {
-    const [city, setCity] = useState<string>("");
+    const [city, setCity] = useState<string>("malmo");
     const [loading, setLoading] = useState<boolean>(true);
 
     const [weatherData, setWeatherData] = useState<any>();
@@ -19,16 +19,10 @@ function App() {
     const [checked, setChecked] = useState<boolean>(false);
     const [unit, setUnit] = useState<string>("metric");
 
-    const [malmoData, setMalmoData] = useState<any>();
-    const [displayMalmoData, setDisplayMalmoData] = useState<any>({});
-
-
-
     const apiKey: string = import.meta.env.VITE_WEATHER_API_KEY;
     const apiCall = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=${unit}&appid=${apiKey}`;
-    const staticMalmoApiCall = `https://api.openweathermap.org/data/2.5/forecast?q=malmö&units=${unit}&appid=${apiKey}`;
-
     async function fetchData() {
+
         if (!city) return;
         setLoading(true);
 
@@ -50,6 +44,10 @@ function App() {
     }
 
     useEffect(() => {
+        fetchData();
+    },[unit])
+
+    useEffect(() => {
         if (!loading) {
             setDisplayData(
                 weatherData.list.slice(0, 8).map((item: any) => ({
@@ -63,47 +61,18 @@ function App() {
     }, [weatherData]);
 
     useEffect(() => {
-        if (malmoData?.list) {
-            setDisplayMalmoData(
-                malmoData.list.slice(0, 8).map((item: any) => ({
-                    name: item.dt_txt.slice(5, 16),
-                    Temperature: item.main.temp,
-                    Description: item.weather[0].description,
-                    icon: item.weather[0].icon,
-                }))
-            );
-        }
-    }, [malmoData]);
-
-    useEffect(() => {
-        async function fetchMalmo() {
-            try {
-                const resMalmo = await fetch(staticMalmoApiCall);
-                const dataMalmo = await resMalmo.json();
-                setMalmoData(dataMalmo);
-                console.log(dataMalmo);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        fetchMalmo();
-    }, [unit]);
-
-    useEffect(() => {
-        if(checked){
+        if (checked) {
             setUnit("imperial");
-        }else{
+        } else {
             setUnit("metric");
         }
-    },[checked])
+    }, [checked]);
 
     return (
         <>
             <h1>
                 {weatherData
                     ? weatherData.city.name
-                    : malmoData
-                    ? malmoData.city.name
                     : "Loading"}
             </h1>
             <input
@@ -123,20 +92,20 @@ function App() {
                 Get data
             </button>
 
-            <label className="relative inline-block bg-gray-500 w-15 h-7.5 rounded-full" >
-                <input 
-                    type="checkbox" 
-                    id="checkBox" 
-                    className="sr-only peer" 
-                    checked={checked} 
+            <label className="relative inline-block bg-gray-500 w-15 h-7.5 rounded-full">
+                <input
+                    type="checkbox"
+                    id="checkBox"
+                    className="sr-only peer"
+                    checked={checked}
                     onChange={(e) => {
-                        setChecked(e.target.checked)
-                    }} 
+                        setChecked(e.target.checked);
+                    }}
                 />
                 <span className="bg-blue-400 w-2/5 h-4/5 absolute rounded-full left-1/20 top-1/2 transform -translate-y-1/2 peer-checked:bg-amber-700 peer-checked:left-55/100 transition-all duration-300 "></span>
             </label>
 
-            {displayMalmoData?.length > 0 && (
+            {displayData?.length > 0 && (
                 <div className="h-44 pr-3">
                     {
                         <ResponsiveContainer>
@@ -145,8 +114,7 @@ function App() {
                                 height={300}
                                 data={
                                     displayData?.length > 0
-                                        ? displayData
-                                        : displayMalmoData
+                                        ? displayData : "Loading"
                                 }
                                 margin={{
                                     top: 5,
