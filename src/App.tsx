@@ -78,7 +78,7 @@ function App() {
 
     return (
         <>
-            <h1>home</h1>
+            <h1>{malmoData?malmoData.city.name : "Loading"}</h1>
             <input
                 type="text"
                 placeholder="Name city"
