@@ -71,6 +71,12 @@ function App() {
                 days[days.length - 1].push(listItem);
             });
 
+            const medianTemp = days.map((day: any) => {
+            const sum = day.reduce((acc: number, item: any) => acc + item.main.temp, 0);
+            return sum / day.length;
+            });
+            console.log(medianTemp);
+
             setFiveDayForecast(days);
             console.log(days);
         }
@@ -193,12 +199,10 @@ function App() {
                             </ResponsiveContainer>
                         }
                     </div>
-                    <h1>{
-                        fiveDayForecast.map((day, dayIndex)=> {
+                    
 
-                        })
-}
-</h1>
+
+
                 </div>
             )}
         </>
