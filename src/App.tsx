@@ -56,7 +56,7 @@ function App() {
             setDisplayMalmoData(
                 malmoData.list.slice(0, 8).map((item: any) => ({
                     name: item.dt_txt,
-                    temperature: item.main.temp,
+                    Temperature: item.main.temp,
                 }))
             );
         }
