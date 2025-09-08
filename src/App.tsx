@@ -18,6 +18,7 @@ function App() {
 
     const [weatherData, setWeatherData] = useState<any>();
     const [displayData, setDisplayData] = useState<any>();
+    const [measurement, setMeasurement] = useState<string>("");
 
     const [malmoData, setMalmoData] = useState<any>();
     const [displayMalmoData, setDisplayMalmoData] = useState<any>({});
@@ -112,6 +113,11 @@ function App() {
             >
                 Get data
             </button>
+
+            <label className="relative inline-block bg-gray-500 w-15 h-7.5 rounded-full" >
+                <input type="checkbox" id="checkBox" className="sr-only peer" />
+                <span className="bg-blue-400 w-2/5 h-4/5 absolute rounded-full left-1/20 top-1/2 transform -translate-y-1/2 peer-checked:bg-amber-700 peer-checked:left-55/100 transition-all duration-300 "></span>
+            </label>
 
             {displayMalmoData?.length > 0 && (
                 <div className="h-44 pr-3">
