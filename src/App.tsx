@@ -37,7 +37,6 @@ function App() {
                 alert(`Error: ${data.message}`);
                 return;
             }
-
             setWeatherData(data);
             console.log(data);
         } catch (error) {
@@ -53,6 +52,8 @@ function App() {
                 weatherData.list.slice(0, 8).map((item: any) => ({
                     name: item.dt_txt.slice(5, 16),
                     Temperature: item.main.temp,
+                    Description: item.weather[0].description,
+                    icon: item.weather[0].icon,
                 }))
             );
         }
@@ -64,6 +65,8 @@ function App() {
                 malmoData.list.slice(0, 8).map((item: any) => ({
                     name: item.dt_txt.slice(5, 16),
                     Temperature: item.main.temp,
+                    Description: item.weather[0].description,
+                    icon: item.weather[0].icon,
                 }))
             );
         }
@@ -131,11 +134,34 @@ function App() {
                                 <XAxis dataKey="name" />
                                 <YAxis label={{value: "°C", dx: -10}} />
                                 <Tooltip
-                                    formatter={(value) => [
-                                        `${value} °C`,
-                                        "Temperature",
-                                    ]}
-                                />{" "}
+                                    content={({active, payload, label}) => {
+                                        if (
+                                            active &&
+                                            payload &&
+                                            payload.length
+                                        ) {
+                                            const data = payload[0].payload; // full data object for this point
+                                            return (
+                                                <div
+                                                    style={{
+                                                        background: "#fff",
+                                                        padding: 5,
+                                                        border: "1px solid #ccc",
+                                                    }}
+                                                >
+                                                    <p>{label}</p>
+                                                    <p>{`Temperature: ${data.Temperature} °C`}</p>
+                                                    <p>{data.Description}</p>
+                                                    <img
+                                                        src={`https://openweathermap.org/img/wn/${data.icon}.png`}
+                                                        alt={data.Description}
+                                                    />
+                                                </div>
+                                            );
+                                        }
+                                        return null;
+                                    }}
+                                />
                                 <Line
                                     type="monotone"
                                     dataKey="Temperature"
