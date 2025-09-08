@@ -33,11 +33,10 @@ function App() {
             const res = await fetch(apiCall);
             const data = await res.json();
 
-
             if (data.cod !== "200") {
-            alert(`Error: ${data.message}`);
-            return;
-        }
+                alert(`Error: ${data.message}`);
+                return;
+            }
 
             setWeatherData(data);
             console.log(data);
@@ -86,7 +85,13 @@ function App() {
 
     return (
         <>
-            <h1>{weatherData ? weatherData.city.name : malmoData ? malmoData.city.name : "Loading"}</h1>
+            <h1>
+                {weatherData
+                    ? weatherData.city.name
+                    : malmoData
+                    ? malmoData.city.name
+                    : "Loading"}
+            </h1>
             <input
                 type="text"
                 placeholder="Name city"
@@ -111,7 +116,11 @@ function App() {
                             <LineChart
                                 width={500}
                                 height={300}
-                                data={displayData?.length > 0 ? displayData : displayMalmoData}
+                                data={
+                                    displayData?.length > 0
+                                        ? displayData
+                                        : displayMalmoData
+                                }
                                 margin={{
                                     top: 5,
                                     right: 30,
@@ -120,7 +129,7 @@ function App() {
                                 }}
                             >
                                 <XAxis dataKey="name" />
-                                <YAxis label={{value: "°C", dx: -10,}} />
+                                <YAxis label={{value: "°C", dx: -10}} />
                                 <Tooltip
                                     formatter={(value) => [
                                         `${value} °C`,
