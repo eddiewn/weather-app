@@ -22,7 +22,6 @@ function App() {
     const apiKey: string = import.meta.env.VITE_WEATHER_API_KEY;
     const apiCall = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=${unit}&appid=${apiKey}`;
     async function fetchData() {
-
         if (!city) return;
         setLoading(true);
 
@@ -45,7 +44,7 @@ function App() {
 
     useEffect(() => {
         fetchData();
-    },[unit])
+    }, [unit]);
 
     useEffect(() => {
         if (!loading) {
@@ -70,11 +69,7 @@ function App() {
 
     return (
         <>
-            <h1>
-                {weatherData
-                    ? weatherData.city.name
-                    : "Loading"}
-            </h1>
+            <h1>{weatherData ? weatherData.city.name : "Loading"}</h1>
             <input
                 type="text"
                 placeholder="Name city"
@@ -114,7 +109,8 @@ function App() {
                                 height={300}
                                 data={
                                     displayData?.length > 0
-                                        ? displayData : "Loading"
+                                        ? displayData
+                                        : "Loading"
                                 }
                                 margin={{
                                     top: 5,
@@ -124,7 +120,12 @@ function App() {
                                 }}
                             >
                                 <XAxis dataKey="name" />
-                                <YAxis label={{value: "°C", dx: -10}} />
+                                <YAxis
+                                    label={{
+                                        value: !checked ? "°C" : "°F",
+                                        dx: -10,
+                                    }}
+                                />
                                 <Tooltip
                                     content={({active, payload, label}) => {
                                         if (
@@ -136,7 +137,11 @@ function App() {
                                             return (
                                                 <div className="flex flex-col border-solid border-1 rounded p-2">
                                                     <p>{label}</p>
-                                                    <p>{`Temperature: ${data.Temperature} °C`}</p>
+                                                    <p>{`Temperature: ${
+                                                        data.Temperature
+                                                    }${
+                                                        !checked ? "°C" : "°F"
+                                                    }`}</p>
                                                     <div className="flex items-center h-[100%] justify-evenly">
                                                         <p>
                                                             {data.Description}
