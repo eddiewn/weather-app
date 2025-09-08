@@ -7,6 +7,7 @@ import {
     XAxis,
     YAxis,
     Tooltip,
+    ResponsiveContainer,
 } from "recharts";
 
 import "./App.css";
@@ -113,9 +114,9 @@ function App() {
             </button>
 
             {displayMalmoData?.length > 0 && (
-                <div>
-                    <p>
-                        {
+                <div className="h-44 pr-3">
+                    {
+                        <ResponsiveContainer>
                             <LineChart
                                 width={500}
                                 height={300}
@@ -140,22 +141,23 @@ function App() {
                                             payload &&
                                             payload.length
                                         ) {
-                                            const data = payload[0].payload; // full data object for this point
+                                            const data = payload[0].payload;
                                             return (
-                                                <div
-                                                    style={{
-                                                        background: "#fff",
-                                                        padding: 5,
-                                                        border: "1px solid #ccc",
-                                                    }}
-                                                >
+                                                <div className="flex flex-col border-solid border-1 rounded p-2">
                                                     <p>{label}</p>
                                                     <p>{`Temperature: ${data.Temperature} °C`}</p>
-                                                    <p>{data.Description}</p>
-                                                    <img
-                                                        src={`https://openweathermap.org/img/wn/${data.icon}.png`}
-                                                        alt={data.Description}
-                                                    />
+                                                    <div className="flex items-center h-[100%] justify-evenly">
+                                                        <p>
+                                                            {data.Description}
+                                                        </p>
+                                                        <img
+                                                            className="w-[40%]"
+                                                            src={`https://openweathermap.org/img/wn/${data.icon}.png`}
+                                                            alt={
+                                                                data.Description
+                                                            }
+                                                        />
+                                                    </div>
                                                 </div>
                                             );
                                         }
@@ -174,8 +176,8 @@ function App() {
                                     stroke="#82ca9d"
                                 />
                             </LineChart>
-                        }
-                    </p>
+                        </ResponsiveContainer>
+                    }
                 </div>
             )}
         </>
