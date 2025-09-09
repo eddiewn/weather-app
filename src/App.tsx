@@ -173,7 +173,7 @@ function App() {
                                                     <div className="flex flex-col border-solid border-1 rounded p-2">
                                                         <p>{label}</p>
                                                         <p>{`Temperature: ${
-                                                            data.Temperature
+                                                            data.Temperature.toString().slice(0,-1)
                                                         }${
                                                             !checked
                                                                 ? "°C"
