@@ -48,11 +48,21 @@ function App() {
         fetchData();
     }, [unit]);
 
+    const weekday = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+    ];
+
     useEffect(() => {
         if (!loading) {
             setDisplayData(
                 weatherData.list.slice(0, 8).map((item: any) => ({
-                    name: item.dt_txt.slice(5, 16),
+                    name: `${weekday[new Date(item.dt * 1000).getDay()]} ${item.dt_txt.slice(11, 16)}`,
                     Temperature: item.main.temp,
                     Description: item.weather[0].description,
                     icon: item.weather[0].icon,
@@ -72,8 +82,11 @@ function App() {
             });
 
             const meanTemp = days.map((day: any) => {
-            const sum = day.reduce((acc: number, item: any) => acc + item.main.temp, 0);
-            return sum / day.length;
+                const sum = day.reduce(
+                    (acc: number, item: any) => acc + item.main.temp,
+                    0
+                );
+                return sum / day.length;
             });
             console.log(meanTemp);
 
@@ -85,6 +98,8 @@ function App() {
     useEffect(() => {
         checked ? setUnit("imperial") : setUnit("metric");
     }, [checked]);
+
+    console.log();
 
     return (
         <>
@@ -199,10 +214,6 @@ function App() {
                             </ResponsiveContainer>
                         }
                     </div>
-                    
-
-
-
                 </div>
             )}
         </>
