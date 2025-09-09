@@ -136,7 +136,7 @@ function App() {
 
             {displayData?.length > 0 && (
                 <div>
-                    <div className="h-44 pr-3">
+                    <div className="h-40 w-200 pr-3">
                         {
                             <ResponsiveContainer>
                                 <LineChart
