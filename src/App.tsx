@@ -232,8 +232,12 @@ function App() {
                                 {fiveDayForecast.map(
                                     (day: any, index: number) => {
                                         console.log(index, day[0]);
+										console.log(typeof day.dt)
                                         return (
                                             <li key={index}>
+												{
+												new Date(day.dt * 1000).getDay()}
+												 + 
                                                 {meanTemp[index]
                                                     .toString()
                                                     .slice(0, 4)}
