@@ -19,7 +19,7 @@ function App() {
     const [checked, setChecked] = useState<boolean>(false);
     const [unit, setUnit] = useState<string>("metric");
     const [fiveDayForecast, setFiveDayForecast] = useState<any[][]>([]);
-    const [meanTemp, setMeanTemp] = useState<number[]>();
+    const [meanTemp, setMeanTemp] = useState<number[]>([]);
 
     const apiKey: string = import.meta.env.VITE_WEATHER_API_KEY;
     const apiCall = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=${unit}&appid=${apiKey}`;
@@ -143,7 +143,7 @@ function App() {
                 displayData?.length > 0 &&
                 fiveDayForecast?.length > 0 && (
                     <div>
-                        <div className="h-40 w-200 pr-3">
+                        <div className="h-40 w-[100%] pr-3">
                             {
                                 <ResponsiveContainer>
                                     <LineChart
@@ -228,13 +228,15 @@ function App() {
                             }
                         </div>
                         <div className="w-100% h-50 text-black">
-                            <ul className="flex">
+                            <ul className="flex justify-around items-center h-[80%]">
                                 {fiveDayForecast.map(
                                     (day: any, index: number) => {
                                         console.log(index, day[0]);
                                         return (
                                             <li key={index}>
-                                                {day[0].main.temp.toString()}
+                                                {meanTemp[index]
+                                                    .toString()
+                                                    .slice(0, 4)}
                                             </li>
                                         );
                                     }
