@@ -140,8 +140,6 @@ function App() {
             </label>
 
             {displayData?.length > 0 && (
-
-				
                 <div>
                     <div className="h-40 w-200 pr-3">
                         {
@@ -224,28 +222,21 @@ function App() {
                                     />
                                 </LineChart>
                             </ResponsiveContainer>
-
                         }
                     </div>
                 </div>
-				
             )}
-			
 
-					<div className="w-100 h-50 text-black">
-						<ul className="">
-							{
-							fiveDayForecast.map((day: any, index: number) => {
-								console.log(index, day[0])
-								return(	
-								 <li key={index}>{day[0].main.temp.toString()}</li>
-								 )
-							})
-							}
-						</ul>
-					</div>
-			
-
+            <div className="w-100 h-50 text-black">
+                <ul className="">
+                    {fiveDayForecast.map((day: any, index: number) => {
+                        console.log(index, day[0]);
+                        return (
+                            <li key={index}>{day[0].main.temp.toString()}</li>
+                        );
+                    })}
+                </ul>
+            </div>
         </>
     );
 }
