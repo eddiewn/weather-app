@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import {
     LineChart,
     Line,
@@ -19,6 +19,7 @@ function App() {
     const [checked, setChecked] = useState<boolean>(false);
     const [unit, setUnit] = useState<string>("metric");
     const [fiveDayForecast, setFiveDayForecast] = useState<any[][]>([]);
+    const [meanTemp, setMeanTemp] = useState<number[]>();
 
     const apiKey: string = import.meta.env.VITE_WEATHER_API_KEY;
     const apiCall = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=${unit}&appid=${apiKey}`;
@@ -62,7 +63,9 @@ function App() {
         if (!loading) {
             setDisplayData(
                 weatherData.list.slice(0, 8).map((item: any) => ({
-                    name: `${weekday[new Date(item.dt * 1000).getDay()]} ${item.dt_txt.slice(11, 16)}`,
+                    name: `${
+                        weekday[new Date(item.dt * 1000).getDay()]
+                    } ${item.dt_txt.slice(11, 16)}`,
                     Temperature: item.main.temp,
                     Description: item.weather[0].description,
                     icon: item.weather[0].icon,
@@ -89,8 +92,10 @@ function App() {
                 return sum / day.length;
             });
             console.log(meanTemp);
+            setMeanTemp(meanTemp);
 
             setFiveDayForecast(days);
+
             console.log(days);
         }
     }, [weatherData, loading, unit]);
@@ -131,10 +136,12 @@ function App() {
                         setChecked(e.target.checked);
                     }}
                 />
-                <span className="bg-blue-400 w-2/5 h-4/5 absolute rounded-full left-1/20 top-1/2 transform -translate-y-1/2 peer-checked:bg-amber-700 peer-checked:left-55/100 transition-all duration-300 "></span>
+                <span className="bg-blue-400 w-2/5 h-4/5 absolute rounded-full left-1/20 top-1/2 transform -translate-y-1/2 peer-checked:bg-amber-700 peer-checked:left-55/100 transition-all duration-500 ease-in-out"></span>
             </label>
 
             {displayData?.length > 0 && (
+
+				
                 <div>
                     <div className="h-40 w-200 pr-3">
                         {
@@ -162,7 +169,11 @@ function App() {
                                         }}
                                     />
                                     <Tooltip
-                                        content={({active, payload, label}) => {
+                                        content={({
+                                            active,
+                                            payload,
+                                            label,
+                                        }) => {
                                             if (
                                                 active &&
                                                 payload &&
@@ -172,9 +183,10 @@ function App() {
                                                 return (
                                                     <div className="flex flex-col border-solid border-1 rounded p-2">
                                                         <p>{label}</p>
-                                                        <p>{`Temperature: ${
-                                                            data.Temperature.toString().slice(0,-1)
-                                                        }${
+                                                        <p>{`Temperature: ${data.Temperature.toString().slice(
+                                                            0,
+                                                            -1
+                                                        )}${
                                                             !checked
                                                                 ? "°C"
                                                                 : "°F"
@@ -203,7 +215,7 @@ function App() {
                                         type="monotone"
                                         dataKey="Temperature"
                                         stroke="#8884d8"
-                                        activeDot={{r: 8}}
+                                        activeDot={{ r: 8 }}
                                     />
                                     <Line
                                         type="monotone"
@@ -212,10 +224,28 @@ function App() {
                                     />
                                 </LineChart>
                             </ResponsiveContainer>
+
                         }
                     </div>
                 </div>
+				
             )}
+			
+
+					<div className="w-100 h-50 text-black">
+						<ul className="">
+							{
+							fiveDayForecast.map((day: any, index: number) => {
+								console.log(index, day[0])
+								return(	
+								 <li key={index}>{day[0].main.temp.toString()}</li>
+								 )
+							})
+							}
+						</ul>
+					</div>
+			
+
         </>
     );
 }
