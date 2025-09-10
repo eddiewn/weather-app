@@ -236,7 +236,7 @@ function App() {
                                         return (
                                             <li key={index}>
 												{
-												new Date(day.dt * 1000).getDay()}
+												weekday[new Date(day[0].dt * 1000).getDay()]}
 												 + 
                                                 {meanTemp[index]
                                                     .toString()
