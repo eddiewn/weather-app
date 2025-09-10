@@ -236,11 +236,12 @@ function App() {
                                         return (
                                             <li key={index}>
 												{
-												weekday[new Date(day[0].dt * 1000).getDay()]}
-												 + 
+												weekday[new Date(day[0].dt * 1000).getDay()] + " "}
+												 
                                                 {meanTemp[index]
                                                     .toString()
                                                     .slice(0, 4)}
+                                                    °C
                                             </li>
                                         );
                                     }
