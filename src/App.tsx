@@ -231,17 +231,14 @@ function App() {
                             <ul className="flex justify-around items-center h-[80%]">
                                 {fiveDayForecast.map(
                                     (day: any, index: number) => {
-                                        console.log(index, day[0]);
-										console.log(typeof day.dt)
                                         return (
                                             <li key={index}>
-												{
-												weekday[new Date(day[0].dt * 1000).getDay()] + " "}
+												{weekday[new Date(day[0].dt * 1000).getDay()] + " "}
 												 
                                                 {meanTemp[index]
                                                     .toString()
                                                     .slice(0, 4)}
-                                                    °C
+                                                    {!checked ? "°C" : "F"}
                                             </li>
                                         );
                                     }
