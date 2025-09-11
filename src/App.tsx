@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import {
     LineChart,
     Line,
@@ -216,7 +216,7 @@ function App() {
                                             type="monotone"
                                             dataKey="Temperature"
                                             stroke="#8884d8"
-                                            activeDot={{ r: 8 }}
+                                            activeDot={{r: 8}}
                                         />
                                         <Line
                                             type="monotone"
@@ -233,12 +233,16 @@ function App() {
                                     (day: any, index: number) => {
                                         return (
                                             <li key={index}>
-												{weekday[new Date(day[0].dt * 1000).getDay()] + " "}
-												 
+                                                {weekday[
+                                                    new Date(
+                                                        day[0].dt * 1000
+                                                    ).getDay()
+                                                ] + " "}
+
                                                 {meanTemp[index]
                                                     .toString()
                                                     .slice(0, 4)}
-                                                    {!checked ? "°C" : "F"}
+                                                {!checked ? "°C" : "F"}
                                             </li>
                                         );
                                     }
