@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useMemo, useEffect, useState} from "react";
 import {
     LineChart,
     Line,
@@ -10,19 +10,53 @@ import {
 
 import "./App.css";
 
+type DisplayDataItem = {
+  name: string;
+  Temperature: number;
+  Description: string;
+  icon: string;
+};
+
+    type WeatherApiResponse = {
+  cod: string;
+  message: number;
+  cnt: number;
+  list: {
+    dt: number;
+    dt_txt: string;
+    main: {
+      temp: number;
+      pressure: number;
+      humidity: number;
+    };
+    weather: {
+      description: string;
+      icon: string;
+    }[];
+  }[];
+  city: {
+    id: number;
+    name: string;
+  };
+};
+
+
+
 function App() {
     const [city, setCity] = useState<string>("malmo");
     const [loading, setLoading] = useState<boolean>(true);
 
-    const [weatherData, setWeatherData] = useState<any>();
-    const [displayData, setDisplayData] = useState<any>();
+    const [weatherData, setWeatherData] = useState<WeatherApiResponse | null>(null);
+const [displayData, setDisplayData] = useState<DisplayDataItem[]>([]);
     const [checked, setChecked] = useState<boolean>(false);
     const [unit, setUnit] = useState<string>("metric");
-    const [fiveDayForecast, setFiveDayForecast] = useState<any[][]>([]);
+    const [fiveDayForecast, setFiveDayForecast] = useState<WeatherApiResponse["list"][]>([]);
     const [meanTemp, setMeanTemp] = useState<number[]>([]);
 
     const apiKey: string = import.meta.env.VITE_WEATHER_API_KEY;
     const apiCall = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=${unit}&appid=${apiKey}`;
+
+
 
     async function fetchData() {
         if (!city) return;
@@ -49,20 +83,23 @@ function App() {
         fetchData();
     }, [unit]);
 
-    const weekday = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-    ];
+
+const weekday = useMemo(() => [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+], []);
+
+
 
     useEffect(() => {
-        if (!loading) {
+        if (!loading && weatherData) {
             setDisplayData(
-                weatherData.list.slice(0, 8).map((item: any) => ({
+                weatherData.list.slice(0, 8).map((item) => ({
                     name: `${
                         weekday[new Date(item.dt * 1000).getDay()]
                     } ${item.dt_txt.slice(11, 16)}`,
@@ -72,10 +109,10 @@ function App() {
                 }))
             );
 
-            let days: any[][] = [];
+            const days: WeatherApiResponse["list"][] = [];
             let currentDay: string | null = null;
 
-            weatherData.list.forEach((listItem: any) => {
+            weatherData.list.forEach((listItem) => {
                 const date = listItem.dt_txt.slice(0, 10);
                 if (date !== currentDay) {
                     days.push([]);
@@ -84,9 +121,9 @@ function App() {
                 days[days.length - 1].push(listItem);
             });
 
-            const meanTemp = days.map((day: any) => {
+            const meanTemp = days.map((day) => {
                 const sum = day.reduce(
-                    (acc: number, item: any) => acc + item.main.temp,
+                    (acc, item) => acc + item.main.temp,
                     0
                 );
                 return sum / day.length;
@@ -98,10 +135,10 @@ function App() {
 
             console.log(days);
         }
-    }, [weatherData, loading, unit]);
+    }, [weatherData, loading, unit, weekday]);
 
     useEffect(() => {
-        checked ? setUnit("imperial") : setUnit("metric");
+        setUnit(checked ? "imperial" : "metric");
     }, [checked]);
 
     console.log();
@@ -152,7 +189,7 @@ function App() {
                                         data={
                                             displayData?.length > 0
                                                 ? displayData
-                                                : "Loading"
+                                                : []
                                         }
                                         margin={{
                                             top: 5,
@@ -230,7 +267,7 @@ function App() {
                         <div className="w-100% h-50 text-black">
                             <ul className="flex justify-around items-center h-[80%]">
                                 {fiveDayForecast.map(
-                                    (day: any, index: number) => {
+                                    (day, index: number) => {
                                         return (
                                             <li key={index}>
                                                 {weekday[
