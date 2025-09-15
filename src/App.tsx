@@ -7,6 +7,15 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from "recharts";
+import Fuse from 'fuse.js';
+import cityData from "../public/cities_only.json";
+
+  const fuse = new Fuse(cityData, {
+    keys: ['name'],
+    threshold: 0.3,
+  });
+
+// fuse.search()
 
 import "./App.css";
 
