@@ -1,4 +1,4 @@
-import {useMemo, useEffect, useState} from "react";
+import {useCallback, useMemo, useEffect, useState} from "react";
 import {
     LineChart,
     Line,
@@ -56,9 +56,7 @@ const [displayData, setDisplayData] = useState<DisplayDataItem[]>([]);
     const apiKey: string = import.meta.env.VITE_WEATHER_API_KEY;
     const apiCall = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=${unit}&appid=${apiKey}`;
 
-
-
-    async function fetchData() {
+    const fetchData = useCallback(async () => {
         if (!city) return;
         setLoading(true);
 
@@ -77,11 +75,11 @@ const [displayData, setDisplayData] = useState<DisplayDataItem[]>([]);
         } finally {
             setLoading(false);
         }
-    }
+    },[apiCall, city]);
 
     useEffect(() => {
         fetchData();
-    }, [unit]);
+    }, [fetchData, unit]);
 
 
 const weekday = useMemo(() => [
