@@ -7,63 +7,82 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from "recharts";
-import Fuse from 'fuse.js';
+import Fuse from "fuse.js";
 import cityData from "../public/cities_only.json";
-
-  const fuse = new Fuse(cityData, {
-    keys: ['name'],
-    threshold: 0.3,
-  });
 
 // fuse.search()
 
 import "./App.css";
 
 type DisplayDataItem = {
-  name: string;
-  Temperature: number;
-  Description: string;
-  icon: string;
-};
-
-    type WeatherApiResponse = {
-  cod: string;
-  message: number;
-  cnt: number;
-  list: {
-    dt: number;
-    dt_txt: string;
-    main: {
-      temp: number;
-      pressure: number;
-      humidity: number;
-    };
-    weather: {
-      description: string;
-      icon: string;
-    }[];
-  }[];
-  city: {
-    id: number;
     name: string;
-  };
+    Temperature: number;
+    Description: string;
+    icon: string;
 };
 
-
+type WeatherApiResponse = {
+    cod: string;
+    message: number;
+    cnt: number;
+    list: {
+        dt: number;
+        dt_txt: string;
+        main: {
+            temp: number;
+            pressure: number;
+            humidity: number;
+        };
+        weather: {
+            description: string;
+            icon: string;
+        }[];
+    }[];
+    city: {
+        id: number;
+        name: string;
+    };
+};
 
 function App() {
     const [city, setCity] = useState<string>("malmo");
+    const [fuzzySearchResults, setFuzzySearchResults] = useState<string[]>([]);
+
     const [loading, setLoading] = useState<boolean>(true);
 
-    const [weatherData, setWeatherData] = useState<WeatherApiResponse | null>(null);
-const [displayData, setDisplayData] = useState<DisplayDataItem[]>([]);
+    const [weatherData, setWeatherData] = useState<WeatherApiResponse | null>(
+        null
+    );
+    const [displayData, setDisplayData] = useState<DisplayDataItem[]>([]);
     const [checked, setChecked] = useState<boolean>(false);
     const [unit, setUnit] = useState<string>("metric");
-    const [fiveDayForecast, setFiveDayForecast] = useState<WeatherApiResponse["list"][]>([]);
+    const [fiveDayForecast, setFiveDayForecast] = useState<
+        WeatherApiResponse["list"][]
+    >([]);
     const [meanTemp, setMeanTemp] = useState<number[]>([]);
 
     const apiKey: string = import.meta.env.VITE_WEATHER_API_KEY;
     const apiCall = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=${unit}&appid=${apiKey}`;
+
+    const fuse = useMemo(() => {
+        return new Fuse(cityData, {threshold: 0.3});
+    }, [cityData]);
+
+    useEffect(() => {
+        if (!city) {
+            setFuzzySearchResults([]);
+            return;
+        } else {
+            const handler = setTimeout(() => {
+            const searchResults = fuse.search(city);
+            setFuzzySearchResults(searchResults.map((result) => result.item));
+            }, 300)
+
+            return () => clearTimeout(handler);
+        }
+
+        console.log();
+    }, [city, fuse]);
 
     const fetchData = useCallback(async () => {
         if (!city) return;
@@ -84,24 +103,24 @@ const [displayData, setDisplayData] = useState<DisplayDataItem[]>([]);
         } finally {
             setLoading(false);
         }
-    },[apiCall, city]);
+    }, [apiCall]);
 
     useEffect(() => {
         fetchData();
     }, [fetchData, unit]);
 
-
-const weekday = useMemo(() => [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-], []);
-
-
+    const weekday = useMemo(
+        () => [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+        ],
+        []
+    );
 
     useEffect(() => {
         if (!loading && weatherData) {
@@ -129,10 +148,7 @@ const weekday = useMemo(() => [
             });
 
             const meanTemp = days.map((day) => {
-                const sum = day.reduce(
-                    (acc, item) => acc + item.main.temp,
-                    0
-                );
+                const sum = day.reduce((acc, item) => acc + item.main.temp, 0);
                 return sum / day.length;
             });
             console.log(meanTemp);
@@ -273,28 +289,34 @@ const weekday = useMemo(() => [
                         </div>
                         <div className="w-100% h-50 text-black">
                             <ul className="flex justify-around items-center h-[80%]">
-                                {fiveDayForecast.map(
-                                    (day, index: number) => {
-                                        return (
-                                            <li key={index}>
-                                                {weekday[
-                                                    new Date(
-                                                        day[0].dt * 1000
-                                                    ).getDay()
-                                                ] + " "}
+                                {fiveDayForecast.map((day, index: number) => {
+                                    return (
+                                        <li key={index}>
+                                            {weekday[
+                                                new Date(
+                                                    day[0].dt * 1000
+                                                ).getDay()
+                                            ] + " "}
 
-                                                {meanTemp[index]
-                                                    .toString()
-                                                    .slice(0, 4)}
-                                                {!checked ? "°C" : "F"}
-                                            </li>
-                                        );
-                                    }
-                                )}
+                                            {meanTemp[index]
+                                                .toString()
+                                                .slice(0, 4)}
+                                            {!checked ? "°C" : "F"}
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         </div>
                     </div>
                 )}
+
+            <div>
+                <ul>
+                    {fuzzySearchResults.slice(0, 5).map((e) => (
+                        <li>{e}</li>
+                    ))}
+                </ul>
+            </div>
         </>
     );
 }
