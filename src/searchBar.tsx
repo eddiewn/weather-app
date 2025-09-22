@@ -3,9 +3,12 @@ import { useState, useEffect, useMemo } from "react";
 import cityData from "../public/cities_only.json";
 import Fuse from "fuse.js";
 
+type SearchBarProps = {
+    city: string;
+    setCity: React.Dispatch<React.SetStateAction<string>>;
+}
 
-
-const SearchBar = ({city, setCity}: {city: string, setCity: React.Dispatch<React.SetStateAction<string>>}) => {
+const SearchBar = ({city, setCity}: SearchBarProps) => {
     const [fuzzySearchResults, setFuzzySearchResults] = useState<string[]>([]);
 
 
