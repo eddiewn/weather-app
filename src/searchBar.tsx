@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect, useMemo } from "react";
+import { useRef,useState, useEffect, useMemo } from "react";
 import cityData from "../public/cities_only.json";
 import Fuse from "fuse.js";
 
@@ -10,16 +10,11 @@ type SearchBarProps = {
 const SearchBar = ({onSubmitCity}: SearchBarProps) => {
     const [fuzzySearchResults, setFuzzySearchResults] = useState<string[]>([]);
     const [city, setCity] = useState<string>("malmo");
-
-    const handleSubmit = () => {
-        onSubmitCity(city); // only send city to parent on button click
-    };
+    const [showResults, setShowResults] = useState<boolean>(false);
 
     const fuse = useMemo(() => {
         return new Fuse(cityData, {threshold: 0.3});
     }, [cityData]);
-
-    
 
     useEffect(() => {
         if (!city) {
@@ -40,19 +35,26 @@ const SearchBar = ({onSubmitCity}: SearchBarProps) => {
             <input
                 type="text"
                 placeholder="Name city"
+                onFocus={() => setShowResults(true)}
+                onBlur={() => setShowResults(false)}
                 onChange={(e) => {
                     setCity(e.target.value);
                 }}
             />
             <input type="button"
-                onClick={handleSubmit}
+                onClick={() => {
+                            onSubmitCity(city)
+                        }}
                 value="Get data"
             />
-            <ul>
-                {fuzzySearchResults.slice(0, 5).map((e) => (
-                    <li>{e}</li>
-                ))}
-            </ul>
+            {showResults && fuzzySearchResults.length > 0 && (
+                <ul className="">
+                    {fuzzySearchResults.slice(0, 5).map((e) => (
+                        <li><button className="cursor-pointer">{e}</button></li>
+                    ))}
+                </ul>
+            )}
+
         </div>
     );
 };
