@@ -34,18 +34,12 @@ type WeatherApiResponse = {
 
 function App() {
     const [city, setCity] = useState<string>("malmo");
-
     const [loading, setLoading] = useState<boolean>(true);
-
-    const [weatherData, setWeatherData] = useState<WeatherApiResponse | null>(
-        null
-    );
+    const [weatherData, setWeatherData] = useState<WeatherApiResponse | null>(null);
     const [displayData, setDisplayData] = useState<DisplayDataItem[]>([]);
     const [checked, setChecked] = useState<boolean>(false);
     const [unit, setUnit] = useState<string>("metric");
-    const [fiveDayForecast, setFiveDayForecast] = useState<
-        WeatherApiResponse["list"][]
-    >([]);
+    const [fiveDayForecast, setFiveDayForecast] = useState<WeatherApiResponse["list"][]>([]);
     const [meanTemp, setMeanTemp] = useState<number[]>([]);
 
     const apiKey: string = import.meta.env.VITE_WEATHER_API_KEY;
@@ -141,17 +135,7 @@ function App() {
         <>
             <h1>{weatherData ? weatherData.city.name : "Loading"}</h1>
 
-            <SearchBar city={city} setCity={setCity}/>
-
-            <button
-                onClick={() => {
-                    if (city) {
-                        fetchData();
-                    }
-                }}
-            >
-                Get data
-            </button>
+            <SearchBar onSubmitCity={setCity}/>
 
             <label className="relative inline-block bg-gray-500 w-15 h-7.5 rounded-full">
                 <input

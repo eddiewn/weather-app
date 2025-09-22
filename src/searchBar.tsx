@@ -4,17 +4,22 @@ import cityData from "../public/cities_only.json";
 import Fuse from "fuse.js";
 
 type SearchBarProps = {
-    city: string;
-    setCity: (newCity: string) => void;
+    onSubmitCity: (newCity: string) => void;
 }
 
-const SearchBar = ({city, setCity}: SearchBarProps) => {
+const SearchBar = ({onSubmitCity}: SearchBarProps) => {
     const [fuzzySearchResults, setFuzzySearchResults] = useState<string[]>([]);
+    const [city, setCity] = useState<string>("malmo");
 
+    const handleSubmit = () => {
+        onSubmitCity(city); // only send city to parent on button click
+    };
 
     const fuse = useMemo(() => {
         return new Fuse(cityData, {threshold: 0.3});
     }, [cityData]);
+
+    
 
     useEffect(() => {
         if (!city) {
@@ -38,6 +43,10 @@ const SearchBar = ({city, setCity}: SearchBarProps) => {
                 onChange={(e) => {
                     setCity(e.target.value);
                 }}
+            />
+            <input type="button"
+                onClick={handleSubmit}
+                value="Get data"
             />
             <ul>
                 {fuzzySearchResults.slice(0, 5).map((e) => (
