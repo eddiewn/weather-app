@@ -1,5 +1,12 @@
 import {useCallback, useMemo, useEffect, useState} from "react";
-import {LineChart,Line,XAxis,YAxis,Tooltip,ResponsiveContainer,} from "recharts";
+import {
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    Tooltip,
+    ResponsiveContainer,
+} from "recharts";
 import "./App.css";
 import SearchBar from "./searchBar";
 type DisplayDataItem = {
@@ -35,19 +42,19 @@ type WeatherApiResponse = {
 function App() {
     const [city, setCity] = useState<string>("malmo");
     const [loading, setLoading] = useState<boolean>(true);
-    const [weatherData, setWeatherData] = useState<WeatherApiResponse | null>(null);
+    const [weatherData, setWeatherData] = useState<WeatherApiResponse | null>(
+        null
+    );
     const [displayData, setDisplayData] = useState<DisplayDataItem[]>([]);
     const [checked, setChecked] = useState<boolean>(false);
     const [unit, setUnit] = useState<string>("metric");
-    const [fiveDayForecast, setFiveDayForecast] = useState<WeatherApiResponse["list"][]>([]);
+    const [fiveDayForecast, setFiveDayForecast] = useState<
+        WeatherApiResponse["list"][]
+    >([]);
     const [meanTemp, setMeanTemp] = useState<number[]>([]);
 
     const apiKey: string = import.meta.env.VITE_WEATHER_API_KEY;
     const apiCall = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=${unit}&appid=${apiKey}`;
-
-
-
-
 
     const fetchData = useCallback(async () => {
         if (!city) return;
@@ -58,7 +65,7 @@ function App() {
             const data = await res.json();
 
             if (data.cod !== "200") {
-                // alert(`Error: ${data.message}`);
+                alert(`Error: ${data.message}`);
                 return;
             }
             setWeatherData(data);
@@ -67,8 +74,8 @@ function App() {
             console.log(error);
         } finally {
             setLoading(false);
-        }
-    }, [apiCall]);
+        }    
+    }, [apiCall, city]);
 
     useEffect(() => {
         fetchData();
@@ -135,7 +142,7 @@ function App() {
         <>
             <h1>{weatherData ? weatherData.city.name : "Loading"}</h1>
 
-            <SearchBar onSubmitCity={setCity}/>
+            <SearchBar onSubmitCity={setCity} />
 
             <label className="relative inline-block bg-gray-500 w-15 h-7.5 rounded-full">
                 <input
@@ -261,9 +268,7 @@ function App() {
                     </div>
                 )}
 
-            <div>
-
-            </div>
+            <div></div>
         </>
     );
 }

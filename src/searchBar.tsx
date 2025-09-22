@@ -1,5 +1,4 @@
-import React from "react";
-import { useRef,useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import cityData from "../public/cities_only.json";
 import Fuse from "fuse.js";
 
@@ -14,7 +13,7 @@ const SearchBar = ({onSubmitCity}: SearchBarProps) => {
 
     const fuse = useMemo(() => {
         return new Fuse(cityData, {threshold: 0.3});
-    }, [cityData]);
+    }, []);
 
     useEffect(() => {
         if (!city) {
