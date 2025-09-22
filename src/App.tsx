@@ -1,19 +1,7 @@
 import {useCallback, useMemo, useEffect, useState} from "react";
-import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    Tooltip,
-    ResponsiveContainer,
-} from "recharts";
-import Fuse from "fuse.js";
-import cityData from "../public/cities_only.json";
-
-// fuse.search()
-
+import {LineChart,Line,XAxis,YAxis,Tooltip,ResponsiveContainer,} from "recharts";
 import "./App.css";
-
+import SearchBar from "./searchBar";
 type DisplayDataItem = {
     name: string;
     Temperature: number;
@@ -46,7 +34,6 @@ type WeatherApiResponse = {
 
 function App() {
     const [city, setCity] = useState<string>("malmo");
-    const [fuzzySearchResults, setFuzzySearchResults] = useState<string[]>([]);
 
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -64,25 +51,9 @@ function App() {
     const apiKey: string = import.meta.env.VITE_WEATHER_API_KEY;
     const apiCall = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=${unit}&appid=${apiKey}`;
 
-    const fuse = useMemo(() => {
-        return new Fuse(cityData, {threshold: 0.3});
-    }, [cityData]);
 
-    useEffect(() => {
-        if (!city) {
-            setFuzzySearchResults([]);
-            return;
-        } else {
-            const handler = setTimeout(() => {
-            const searchResults = fuse.search(city);
-            setFuzzySearchResults(searchResults.map((result) => result.item));
-            }, 300)
 
-            return () => clearTimeout(handler);
-        }
 
-        console.log();
-    }, [city, fuse]);
 
     const fetchData = useCallback(async () => {
         if (!city) return;
@@ -93,7 +64,7 @@ function App() {
             const data = await res.json();
 
             if (data.cod !== "200") {
-                alert(`Error: ${data.message}`);
+                // alert(`Error: ${data.message}`);
                 return;
             }
             setWeatherData(data);
@@ -169,13 +140,9 @@ function App() {
     return (
         <>
             <h1>{weatherData ? weatherData.city.name : "Loading"}</h1>
-            <input
-                type="text"
-                placeholder="Name city"
-                onChange={(e) => {
-                    setCity(e.target.value);
-                }}
-            />
+
+            <SearchBar city={city} setCity={setCity}/>
+
             <button
                 onClick={() => {
                     if (city) {
@@ -311,11 +278,7 @@ function App() {
                 )}
 
             <div>
-                <ul>
-                    {fuzzySearchResults.slice(0, 5).map((e) => (
-                        <li>{e}</li>
-                    ))}
-                </ul>
+
             </div>
         </>
     );
