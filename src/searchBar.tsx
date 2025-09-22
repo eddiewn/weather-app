@@ -5,7 +5,7 @@ import Fuse from "fuse.js";
 
 type SearchBarProps = {
     city: string;
-    setCity: React.Dispatch<React.SetStateAction<string>>;
+    setCity: (newCity: string) => void;
 }
 
 const SearchBar = ({city, setCity}: SearchBarProps) => {
