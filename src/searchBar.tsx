@@ -1,10 +1,10 @@
-import { useState, useEffect, useMemo } from "react";
+import {useState, useEffect, useMemo} from "react";
 import cityData from "../public/cities_only.json";
 import Fuse from "fuse.js";
 
 type SearchBarProps = {
     onSubmitCity: (newCity: string) => void;
-}
+};
 
 const SearchBar = ({onSubmitCity}: SearchBarProps) => {
     const [fuzzySearchResults, setFuzzySearchResults] = useState<string[]>([]);
@@ -21,9 +21,11 @@ const SearchBar = ({onSubmitCity}: SearchBarProps) => {
             return;
         } else {
             const handler = setTimeout(() => {
-            const searchResults = fuse.search(city);
-            setFuzzySearchResults(searchResults.map((result) => result.item));
-            }, 300)
+                const searchResults = fuse.search(city);
+                setFuzzySearchResults(
+                    searchResults.map((result) => result.item)
+                );
+            }, 300);
 
             return () => clearTimeout(handler);
         }
@@ -35,25 +37,40 @@ const SearchBar = ({onSubmitCity}: SearchBarProps) => {
                 type="text"
                 placeholder="Name city"
                 onFocus={() => setShowResults(true)}
-                onBlur={() => setShowResults(false)}
+                onBlur={() => {
+                    const handler = setTimeout(() => {
+                        setShowResults(false);
+                    }, 100);
+                    return () => clearTimeout(handler);
+                }}
                 onChange={(e) => {
                     setCity(e.target.value);
                 }}
             />
-            <input type="button"
+            <input
+                type="button"
                 onClick={() => {
-                            onSubmitCity(city)
-                        }}
+                    onSubmitCity(city);
+                }}
                 value="Get data"
             />
             {showResults && fuzzySearchResults.length > 0 && (
                 <ul className="">
                     {fuzzySearchResults.slice(0, 5).map((e) => (
-                        <li><button className="cursor-pointer">{e}</button></li>
+                        <li>
+                            <button
+                                className="cursor-pointer"
+                                onClick={() => {
+                                    setCity(e);
+                                    onSubmitCity(e);
+                                }}
+                            >
+                                {e}
+                            </button>
+                        </li>
                     ))}
                 </ul>
             )}
-
         </div>
     );
 };
