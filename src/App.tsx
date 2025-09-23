@@ -1,5 +1,5 @@
 import {useCallback, useMemo, useEffect, useState} from "react";
-
+import DisplayFiveDayForecast from "./DisplayFiveDayForecast";
 import SearchBar from "./searchBar";
 import DisplayLineChart from "./DisplayLineChart";
 type DisplayDataItem = {
@@ -160,24 +160,7 @@ function App() {
                             }
                         </div>
                         <div className="w-100% h-50 text-black">
-                            <ul className="flex justify-around items-center h-[80%]">
-                                {fiveDayForecast.map((day, index: number) => {
-                                    return (
-                                        <li key={index}>
-                                            {weekday[
-                                                new Date(
-                                                    day[0].dt * 1000
-                                                ).getDay()
-                                            ] + " "}
-
-                                            {meanTemp[index]
-                                                .toString()
-                                                .slice(0, 4)}
-                                            {!checked ? "°C" : "F"}
-                                        </li>
-                                    );
-                                })}
-                            </ul>
+                            <DisplayFiveDayForecast fiveDayForeCast={fiveDayForecast} weekday={weekday} meanTemp={meanTemp} checked={checked}/>
                         </div>
                     </div>
                 )}
