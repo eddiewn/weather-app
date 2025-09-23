@@ -2,6 +2,8 @@ import {useCallback, useMemo, useEffect, useState} from "react";
 import DisplayFiveDayForecast from "./DisplayFiveDayForecast";
 import SearchBar from "./searchBar";
 import DisplayLineChart from "./DisplayLineChart";
+import DisplayToggleButton from "./toggleButton";
+import Header from "./Header";
 type DisplayDataItem = {
     name: string;
     Temperature: number;
@@ -133,23 +135,9 @@ function App() {
 
     return (
         <>
-            <h1>{weatherData ? weatherData.city.name : "Loading"}</h1>
-
+            <Header weatherData={weatherData} />
             <SearchBar onSubmitCity={setCity} />
-
-            <label className="relative inline-block bg-gray-500 w-15 h-7.5 rounded-full">
-                <input
-                    type="checkbox"
-                    id="checkBox"
-                    className="sr-only peer"
-                    checked={checked}
-                    onChange={(e) => {
-                        setChecked(e.target.checked);
-                    }}
-                />
-                <span className="bg-blue-400 w-2/5 h-4/5 absolute rounded-full left-1/20 top-1/2 transform -translate-y-1/2 peer-checked:bg-amber-700 peer-checked:left-55/100 transition-all duration-500 ease-in-out"></span>
-            </label>
-
+            <DisplayToggleButton checked={checked} setChecked={setChecked}/>
             {!loading &&
                 displayData?.length > 0 &&
                 fiveDayForecast?.length > 0 && (
