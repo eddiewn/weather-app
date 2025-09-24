@@ -11,6 +11,12 @@ type DisplayDataItem = {
     icon: string;
 };
 
+//
+//  Klar nu, vill inte mer tack för mig
+//
+
+
+
 type WeatherApiResponse = {
     cod: string;
     message: number;
