@@ -32,8 +32,9 @@ const SearchBar = ({ onSubmitCity }: SearchBarProps) => {
     }, [city, fuse]);
 
     return (
-        <div className="flex flex-col">
+        <div className="flex justify-start flex-col w-full">
             <input
+                className=""
                 type="text"
                 placeholder="Name city"
                 onFocus={() => setShowResults(true)}

@@ -135,8 +135,8 @@ function App() {
 
     return (
         <>
-            <main className="bg-gray-200 flex-col h-screen w-screen flex justify-center items-center">
-                <div className="bg-white rounded-3xl p-7 h-[90%] w-[80%]">
+            <main className="bg-gray-200 flex-col h-screen w-screen flex justify-center items-center ">
+                <div className="bg-white rounded-3xl p-7 h-[90%] w-[80%] flex flex-col gap-5 items-center justify-center">
                     <Header weatherData={weatherData} />
                     <SearchBar onSubmitCity={setCity} />
                     <DisplayToggleButton
@@ -147,7 +147,7 @@ function App() {
                         displayData?.length > 0 &&
                         fiveDayForecast?.length > 0 && (
                             <div className=" w-full">
-                                <div className="h-50 w-full">
+                                <div className="h-50 w-full ">
                                     {
                                         <DisplayLineChart
                                             displayData={displayData}
@@ -156,7 +156,7 @@ function App() {
                                     }
                                 </div>
                                 -
-                                <div className=" text-black">
+                                <div className="flex text-black">
                                     <DisplayFiveDayForecast
                                         fiveDayForeCast={fiveDayForecast}
                                         weekday={weekday}

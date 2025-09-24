@@ -1,8 +1,8 @@
 type Props = {
     fiveDayForeCast: {
         dt: number;
-        main: {temp: number};
-        weather: {description: string; icon: string}[];
+        main: { temp: number };
+        weather: { description: string; icon: string }[];
     }[][];
     weekday: string[];
     meanTemp: number[];
@@ -16,10 +16,10 @@ const DisplayFiveDayForecast = ({
     checked,
 }: Props) => {
     return (
-        <ul className="flex flex-col justify-around items-center gap-5">
+        <ul className="flex flex-col lg:flex-row justify-evenly items-center md:gap-5 sm:gap-5 flex-1">
             {fiveDayForeCast.map((day, index: number) => {
                 return (
-                    <li key={index}>
+                    <li className="text-center lg:m-0.5" key={index}>
                         {weekday[new Date(day[0].dt * 1000).getDay()] + " "}
 
                         {meanTemp[index].toString().slice(0, 4)}

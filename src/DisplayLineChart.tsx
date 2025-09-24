@@ -17,11 +17,7 @@ type LineChartProps = {
     checked: boolean;
 };
 
-
 const DisplayLineChart = ({ displayData, checked }: LineChartProps) => {
-
-
-
     return (
         <ResponsiveContainer>
             <LineChart
@@ -35,8 +31,11 @@ const DisplayLineChart = ({ displayData, checked }: LineChartProps) => {
                     bottom: 5,
                 }}
             >
-                <XAxis dataKey="name"
-                tickFormatter={(name) => (window.innerWidth > 750 ? name : name.slice(0,1))}
+                <XAxis
+                    dataKey="name"
+                    tickFormatter={(name) =>
+                        window.innerWidth > 768 ? name : name.slice(0, 1)
+                    }
                 />
 
                 <YAxis
