@@ -135,25 +135,27 @@ function App() {
 
     return (
         <>
+        <main className="bg-gray-200 h-screen w-screen flex flex-col justify-center items-center">
+            <div className="bg-white rounded-3xl p-7">
             <Header weatherData={weatherData} />
             <SearchBar onSubmitCity={setCity} />
             <DisplayToggleButton checked={checked} setChecked={setChecked}/>
             {!loading &&
                 displayData?.length > 0 &&
                 fiveDayForecast?.length > 0 && (
-                    <div>
-                        <div className="h-40 w-[100%] pr-3">
+                    <div className=" w-200">
+                        <div className="h-40 pr-3">
                             {
                                 <DisplayLineChart displayData={displayData} checked={checked}/>         
                             }
                         </div>
-                        <div className="w-100% h-50 text-black">
+                        <div className="w-100% text-black">
                             <DisplayFiveDayForecast fiveDayForeCast={fiveDayForecast} weekday={weekday} meanTemp={meanTemp} checked={checked}/>
                         </div>
                     </div>
                 )}
-
-            <div></div>
+                </div>
+            </main>
         </>
     );
 }

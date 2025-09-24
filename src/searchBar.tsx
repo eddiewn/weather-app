@@ -47,7 +47,7 @@ const SearchBar = ({onSubmitCity}: SearchBarProps) => {
                     setCity(e.target.value);
                 }}
             />
-            <input
+            <input className="cursor-pointer"
                 type="button"
                 onClick={() => {
                     onSubmitCity(city);

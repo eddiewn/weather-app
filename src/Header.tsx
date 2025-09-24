@@ -4,7 +4,7 @@ type Props = {
 
 const header = ({weatherData}: Props) => {
     return(
-        <h1>{weatherData ? weatherData.city.name : "Loading"}</h1>
+        <h1>Weather in {weatherData ? weatherData.city.name : "Loading"} </h1>
     );
 }
 
