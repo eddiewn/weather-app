@@ -16,7 +16,7 @@ const DisplayFiveDayForecast = ({
     checked,
 }: Props) => {
     return (
-        <ul className="flex justify-around items-center h-[80%]">
+        <ul className="flex flex-col justify-around items-center gap-5">
             {fiveDayForeCast.map((day, index: number) => {
                 return (
                     <li key={index}>

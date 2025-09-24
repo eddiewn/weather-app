@@ -1,4 +1,4 @@
-import {useState, useEffect, useMemo} from "react";
+import { useState, useEffect, useMemo } from "react";
 import cityData from "../public/cities_only.json";
 import Fuse from "fuse.js";
 
@@ -6,13 +6,13 @@ type SearchBarProps = {
     onSubmitCity: (newCity: string) => void;
 };
 
-const SearchBar = ({onSubmitCity}: SearchBarProps) => {
+const SearchBar = ({ onSubmitCity }: SearchBarProps) => {
     const [fuzzySearchResults, setFuzzySearchResults] = useState<string[]>([]);
     const [city, setCity] = useState<string>("malmo");
     const [showResults, setShowResults] = useState<boolean>(false);
 
     const fuse = useMemo(() => {
-        return new Fuse(cityData, {threshold: 0.3});
+        return new Fuse(cityData, { threshold: 0.3 });
     }, []);
 
     useEffect(() => {
@@ -32,7 +32,7 @@ const SearchBar = ({onSubmitCity}: SearchBarProps) => {
     }, [city, fuse]);
 
     return (
-        <div>
+        <div className="flex flex-col">
             <input
                 type="text"
                 placeholder="Name city"
@@ -47,19 +47,14 @@ const SearchBar = ({onSubmitCity}: SearchBarProps) => {
                     setCity(e.target.value);
                 }}
             />
-            <input className="cursor-pointer"
-                type="button"
-                onClick={() => {
-                    onSubmitCity(city);
-                }}
-                value="Get data"
-            />
+
             {showResults && fuzzySearchResults.length > 0 && (
-                <ul className="">
+                <div className="relative">
+                <ul className="absolute bg-white z-10 top-full">
                     {fuzzySearchResults.slice(0, 5).map((e) => (
-                        <li>
+                        <li className="">
                             <button
-                                className="cursor-pointer"
+                                className="cursor-pointer relative"
                                 onClick={() => {
                                     onSubmitCity(e);
                                 }}
@@ -69,6 +64,7 @@ const SearchBar = ({onSubmitCity}: SearchBarProps) => {
                         </li>
                     ))}
                 </ul>
+                </div>
             )}
         </div>
     );
