@@ -32,7 +32,7 @@ const SearchBar = ({ onSubmitCity }: SearchBarProps) => {
     }, [city, fuse]);
 
     return (
-        <div className="flex justify-start flex-col w-full">
+        <div className="self-start">
             <input
                 className=""
                 type="text"
@@ -51,7 +51,7 @@ const SearchBar = ({ onSubmitCity }: SearchBarProps) => {
 
             {showResults && fuzzySearchResults.length > 0 && (
                 <div className="relative">
-                    <ul className="absolute bg-white z-10 top-full">
+                    <ul className="absolute  border-2 border-black bg-white z-10 top-full">
                         {fuzzySearchResults.slice(0, 5).map((e) => (
                             <li className="">
                                 <button
