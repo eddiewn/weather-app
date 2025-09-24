@@ -17,7 +17,11 @@ type LineChartProps = {
     checked: boolean;
 };
 
+
 const DisplayLineChart = ({ displayData, checked }: LineChartProps) => {
+
+
+
     return (
         <ResponsiveContainer>
             <LineChart
@@ -31,7 +35,10 @@ const DisplayLineChart = ({ displayData, checked }: LineChartProps) => {
                     bottom: 5,
                 }}
             >
-                <XAxis dataKey="name" />
+                <XAxis dataKey="name"
+                tickFormatter={(name) => (window.innerWidth > 750 ? name : name.slice(0,1))}
+                />
+
                 <YAxis
                     label={{
                         value: !checked ? "°C" : "°F",

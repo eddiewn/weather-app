@@ -50,20 +50,20 @@ const SearchBar = ({ onSubmitCity }: SearchBarProps) => {
 
             {showResults && fuzzySearchResults.length > 0 && (
                 <div className="relative">
-                <ul className="absolute bg-white z-10 top-full">
-                    {fuzzySearchResults.slice(0, 5).map((e) => (
-                        <li className="">
-                            <button
-                                className="cursor-pointer relative"
-                                onClick={() => {
-                                    onSubmitCity(e);
-                                }}
-                            >
-                                {e}
-                            </button>
-                        </li>
-                    ))}
-                </ul>
+                    <ul className="absolute bg-white z-10 top-full">
+                        {fuzzySearchResults.slice(0, 5).map((e) => (
+                            <li className="">
+                                <button
+                                    className="cursor-pointer relative"
+                                    onClick={() => {
+                                        onSubmitCity(e);
+                                    }}
+                                >
+                                    {e}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             )}
         </div>
