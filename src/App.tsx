@@ -54,7 +54,7 @@ function App() {
     >([]);
     const [meanTemp, setMeanTemp] = useState<number[]>([]);
 
-    const apiKey: string = import.meta.env.VITE_WEATHER_API_KEY;
+    const apiKey: string = "e6b5d53690ab5dc9192510d42cb182a5"
     const apiCall = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=${unit}&appid=${apiKey}`;
 
     const fetchData = useCallback(async () => {
