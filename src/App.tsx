@@ -4,18 +4,18 @@ import SearchBar from "./searchBar";
 import DisplayLineChart from "./DisplayLineChart";
 import DisplayToggleButton from "./toggleButton";
 import Header from "./Header";
+
 type DisplayDataItem = {
     name: string;
     Temperature: number;
     Description: string;
+    Wind: number;
     icon: string;
 };
 
 //
 //  Klar nu, vill inte mer tack för mig
 //
-
-
 
 type WeatherApiResponse = {
     cod: string;
@@ -33,6 +33,9 @@ type WeatherApiResponse = {
             description: string;
             icon: string;
         }[];
+        wind: {
+            speed: number;
+        }
     }[];
     city: {
         id: number;
@@ -103,6 +106,7 @@ function App() {
                         weekday[new Date(item.dt * 1000).getDay()]
                     } ${item.dt_txt.slice(11, 16)}`,
                     Temperature: item.main.temp,
+                    Wind: item.wind.speed,
                     Description: item.weather[0].description,
                     icon: item.weather[0].icon,
                 }))
@@ -138,6 +142,7 @@ function App() {
     }, [checked]);
 
     console.log();
+
 
     return (
         <>

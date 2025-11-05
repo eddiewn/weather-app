@@ -12,12 +12,14 @@ type LineChartProps = {
         name: string;
         Temperature: number;
         Description: string;
+        Wind: number;
         icon: string;
     }[];
     checked: boolean;
 };
 
 const DisplayLineChart = ({ displayData, checked }: LineChartProps) => {
+
     return (
         <ResponsiveContainer>
             <LineChart
@@ -51,6 +53,8 @@ const DisplayLineChart = ({ displayData, checked }: LineChartProps) => {
                             return (
                                 <div className="flex flex-col border-solid border-1 rounded p-2">
                                     <p>{label}</p>
+                                    <p>Wind: {data.Wind} m/s</p>
+
                                     <p>{`Temperature: ${data.Temperature.toString().slice(
                                         0,
                                         -1
