@@ -25,7 +25,7 @@ const SearchBar = ({ onSubmitCity }: SearchBarProps) => {
                 setFuzzySearchResults(
                     searchResults.map((result) => result.item)
                 );
-            }, 300);
+            }, 500);
 
             return () => clearTimeout(handler);
         }
@@ -41,7 +41,7 @@ const SearchBar = ({ onSubmitCity }: SearchBarProps) => {
                 onBlur={() => {
                     const handler = setTimeout(() => {
                         setShowResults(false);
-                    }, 100);
+                    }, 500);
                     return () => clearTimeout(handler);
                 }}
                 onChange={(e) => {
